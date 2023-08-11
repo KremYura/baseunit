@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./event-driven-domain/tsconfig.build.json"
+    },
+  ],
+}

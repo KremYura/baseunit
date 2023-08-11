@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "references": [
+    { "path": "../../packages/event-driven-domain/tsconfig.build.json" }
+  ],
+  "include": ["./"]
+}

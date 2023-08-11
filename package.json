@@ -1,0 +1,23 @@
+{
+  "name": "@baseunit/main",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b -v packages",
+    "clean": "tsc -b --clean packages"
+  },
+  "workspaces": [
+    "packages/*",
+    "example/*"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.6.1",
+    "typescript": "^5.1.6"
+  }
+}

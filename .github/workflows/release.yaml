@@ -1,0 +1,26 @@
+name: RELEASE
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - 'packages/event-driven-domain/package.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run ci -w packages/event-driven-domain/
+
+      - id: publish
+        name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          package: 'packages/event-driven-domain/'
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}

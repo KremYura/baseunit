@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    // "paths": {
+    //   "@baseunit/core": ["./packages/core"],
+    //   "@baseunit/common": ["./packages/common"],
+    // },
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@baseunit/edd",
+  "version": "1.0.2",
+  "description": "Event-Driven Domain implementation helper.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KremYura/baseunit.git",
+    "directory": "packages/event-driven-domain"
+  },
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "tsc -b",
+    "ci": "npm run lint && npm run test && npm run build"
+  },
+  "author": "Yurii Kremenchutskyi",
+  "license": "ISC",
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "type-fest": "^4.1.0",
+    "vitest": "^0.34.1"
+  }
+}
