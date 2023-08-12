@@ -1,7 +1,10 @@
 {
   "name": "@baseunit/edd",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Event-Driven Domain implementation helper.",
+  "keywords": [ "aggregate", "event", "event-driven", "ddd" ],
+  "author": "Yurii Kremenchutskyi <kremyura@gmail.com>",
+  "license": "ISC",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
@@ -15,8 +18,6 @@
     "build": "tsc -b",
     "ci": "npm run lint && npm run test && npm run build"
   },
-  "author": "Yurii Kremenchutskyi",
-  "license": "ISC",
   "dependencies": {
     "reflect-metadata": "^0.1.13"
   },
