@@ -1,6 +1,6 @@
 {
   "name": "@baseunit/edd",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Event-Driven Domain implementation helper.",
   "keywords": [ "aggregate", "event", "event-driven", "ddd" ],
   "author": "Yurii Kremenchutskyi <kremyura@gmail.com>",
@@ -14,9 +14,9 @@
   },
   "scripts": {
     "lint": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest",
     "build": "tsc -b",
-    "ci": "npm run lint && npm run test && npm run build"
+    "ci": "npm run lint && npm run test run && npm run build"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13"

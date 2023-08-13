@@ -11,8 +11,15 @@ export abstract class AggregateRoot<AggregateIdType = string, BaseEvent extends 
    */
   private [AGGREGATE_VERSION] = 0;
 
+  /**
+   * Creates Aggregate with unique identifier
+   * @param {*} id unique identifier
+   */
   constructor(public readonly id: AggregateIdType) {}
 
+  /**
+   * Aggregate version
+   */
   public get version() {
     return this[AGGREGATE_VERSION];
   }
@@ -20,36 +27,58 @@ export abstract class AggregateRoot<AggregateIdType = string, BaseEvent extends 
     this[AGGREGATE_VERSION] = version;
   }
 
+  /**
+   * Returns array of events applied to current Aggregate
+   */
+  getUncommittedEvents(): BaseEvent[] {
+    return this[INTERNAL_EVENTS];
+  }
+
+  /**
+   * Process events by calling `await publisher.publishAll` method
+   * @param {IEventPublisher} publisher
+   */
   async commit(publisher: IEventPublisher<BaseEvent>): Promise<void> {
-    const events = this[INTERNAL_EVENTS];
+    const events = this.getUncommittedEvents();
     await publisher.publishAll(events);
     this[INTERNAL_EVENTS] = [];
   }
 
+  /**
+   * Restore state of aggregate applying every event with `this.apply(event, true)`
+   * @param {BaseEvent[]} history
+   */
   loadFromHistory(history: BaseEvent[]) {
     history.forEach((event) => this.apply(event, true));
   }
 
+  /**
+   * Apply event to Aggregate by calling its corresponding `onMethod` implementation.
+   * If isFromHistory set as true, do not register event for future commit
+   * @param {BaseEvent} event
+   * @param {boolean} [isFromHistory=false]
+   */
   protected apply(event: BaseEvent, isFromHistory = false) {
     // TODO: rethink this approach, is it fine?
     event.meta.aggregateType = this.constructor.name;
 
     if (!isFromHistory) {
+      // set event version as next verion of aggregate
       event.meta.version = this.version + 1;
+      // add event for future publishing
       this[INTERNAL_EVENTS].push(event);
     }
+
+    // set aggregate version as version of applied event
+    this.version = event.meta.version;
 
     const handler = this.getEventHandler(event);
     
     if (handler) {
       try {
         handler.call(this, event);
-        this.version = event.meta.version;
       } catch (e) {
-        // if (e instanceof ValueObjectValidationError) {
-        //   appLogger.error('Data inconsistency found during applying an event', event);
-        // }
-
+        // TODO: review what to do with this.version and event.meta.version if handler throws error
         throw e;
       }
     }
