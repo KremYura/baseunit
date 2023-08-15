@@ -150,7 +150,7 @@ export class UUID extends ValueObject<string> {
 // UUID ValueObject example can be used with Aggregate, if we would like to have Aggregate with non string id type
 abstract class DomainEvent extends BaseEvent<UUID> {}
 
-export class UserCreatedEvent extends BaseEvent { /***/ }
+export class UserCreatedEvent extends DomainEvent { /***/ }
 
 export class User extends AggregateRoot<UUID, DomainEvent> { /***/ }
 ```
