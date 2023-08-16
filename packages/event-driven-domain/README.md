@@ -157,7 +157,7 @@ export class User extends AggregateRoot<UUID, DomainEvent> { /***/ }
 
 ### EventPublisher
 
-Serves functionality with actual Event processing. Can we implemented to store Events in persistent storage, publish them into Queue, etc.
+Serves functionality with actual Event processing. Can be implemented to store Events in persistent storage, publish them into Queue, etc.
 
 ```typescript
 import { BaseEvent, EventPublisher } from '@baseunit/edd';
