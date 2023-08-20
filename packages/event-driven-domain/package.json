@@ -1,6 +1,6 @@
 {
   "name": "@baseunit/edd",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Event-Driven Domain implementation helper.",
   "keywords": [ "aggregate", "event", "event-driven", "ddd" ],
   "author": "Yurii Kremenchutskyi <kremyura@gmail.com>",
