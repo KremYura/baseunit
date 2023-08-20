@@ -17,6 +17,8 @@ Whether you're adhering strictly to Effective Aggregate Design principles or sim
 
 ## Usage
 
+![concept](./notes/edd-main.png "concept")
+
 ### Aggregate
 
 An AggregateRoot is where business domain logic is implemented. It enforces invariants, created using factory functions, and has a constructor with just an ID parameter. State changes are made through method calls that emit events. Actual state changes are handled by implementing `onEventName` methods. State restoration is achieved through `loadFromHistory` method calls.
