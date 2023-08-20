@@ -17,7 +17,7 @@ Whether you're adhering strictly to Effective Aggregate Design principles or sim
 
 ## Usage
 
-![concept](./notes/edd-main.png "concept")
+![concept](./notes/edd-main.svg "concept")
 
 ### Aggregate
 
