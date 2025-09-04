@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - packages/**
-    branches:
-      - main
+    # branches:
+    #   - main
 
   pull_request:
     types: [opened, reopened, synchronize]
