@@ -3,14 +3,14 @@ name: Build
 on:
   push:
     paths:
-      - *
+      - packages/**
     branches:
       - main
 
   pull_request:
     types: [opened, reopened, synchronize]
     paths:
-      - *
+      - packages/**
     branches:
       - main
 
