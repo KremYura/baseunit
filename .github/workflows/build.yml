@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - packages/**
+      - .github/workflows/build.yml
     branches:
       - master
 
