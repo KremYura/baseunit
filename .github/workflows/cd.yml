@@ -1,0 +1,35 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  check-labels-and-deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Download workflow artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pr-metadata
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+          path: ./pr-metadata
+      - name: Read PR metadata
+        id: read-metadata
+        run: |
+          if [ -f "./pr-metadata/pr-metadata.json" ]; then
+            echo "PR metadata found"
+            PR_NUMBER=$(jq -r .number ./pr-metadata/pr-metadata.json)
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            IMG_VERSION=$(jq -r .version ./pr-metadata/pr-metadata.json)
+            echo "IMG_VERSION=$IMG_VERSION" >> $GITHUB_ENV
+          else
+            echo "No PR metadata found, this might be a direct push to main"
+            exit 0
+          fi
