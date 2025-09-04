@@ -1,0 +1,30 @@
+name: Build
+on:
+  push:
+    paths:
+      - **
+    branches:
+      - main
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - **
+    branches:
+      - main
+
+jobs:
+  build:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        tags: |
+          type=sha,prefix={{branch}}-,event=branch,enable={{is_default_branch}}
+          type=sha,prefix=temp-{{branch}}-,event=branch,enable=${{ github.ref != format('refs/heads/{0}', 'main') }}
+          type=ref,prefix=temp-,suffix=-{{sha}},event=pr
+          type=ref,event=tag
+    - name: Set build version
+        run: echo "BUILD_VERSION=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
