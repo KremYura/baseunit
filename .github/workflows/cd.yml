@@ -25,8 +25,8 @@ jobs:
         run: |
           if [ -f "./pr-metadata/pr-metadata.json" ]; then
             echo "PR metadata found"
-            PR_NUMBER=$(jq -r .number ./pr-metadata/pr-metadata.json)
-            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            # PR_NUMBER=$(jq -r .number ./pr-metadata/pr-metadata.json)
+            # echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
             IMG_VERSION=$(jq -r .version ./pr-metadata/pr-metadata.json)
             echo "IMG_VERSION=$IMG_VERSION" >> $GITHUB_ENV
           else
