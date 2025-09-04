@@ -31,3 +31,15 @@ jobs:
             type=ref,event=tag
       - name: Set build version
         run: echo "BUILD_VERSION=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
+      - name: Save PR metadata for CD workflow
+        if: github.event_name == 'pull_request'
+        run: |
+          mkdir -p ./pr-metadata
+          echo "{\"number\":\"${{ github.event.pull_request.number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
+          
+      - name: Upload PR metadata
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr-metadata
+          path: ./pr-metadata
