@@ -5,8 +5,8 @@ on:
     workflows: ["Build"]
     types:
       - completed
-    branches:
-      - main
+    # branches:
+    #   - main
 
 jobs:
   check-labels-and-deploy:
