@@ -32,3 +32,21 @@ jobs:
             echo "No PR metadata found, this might be a direct push to main"
             exit 0
           fi
+      - name: Trigger deployment workflow
+        if: ${{  env.IMG_VERSION != '' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'master',
+              inputs: {
+                imageTag: process.env.IMG_VERSION,
+                environment: 'prod01',
+                app_component: 'atool_api'
+              }
+            });
+            console.log('Deployment workflow triggered successfully');

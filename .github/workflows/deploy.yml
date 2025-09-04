@@ -1,0 +1,35 @@
+name: App containers manual deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      imageTag:
+        description: Image tag to deploy
+        required: true
+
+      environment:
+        type: choice
+        description: Environment
+        options:
+        - dev
+        - prod
+
+      app_component:
+        type: choice
+        description: Component
+        options:
+        - api
+        - ui
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Set up atool component
+        run: |
+          echo "Deploymend triggered for:"
+          echo "imageTag: ${{ inputs.imageTag }}"
+          echo "environment: ${{ inputs.environment }}"
+          echo "app_component: ${{ inputs.app_component }}"
+          
