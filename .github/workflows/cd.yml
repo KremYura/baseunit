@@ -27,6 +27,7 @@ jobs:
             echo "PR metadata found"
             IMG_VERSION=$(jq -r .version ./pr-metadata/pr-metadata.json)
             echo "IMG_VERSION=$IMG_VERSION" >> $GITHUB_ENV
+            echo "IMG_VERSION=$IMG_VERSION"
           else
             echo "No PR metadata found, this might be a direct push to main"
             exit 0
