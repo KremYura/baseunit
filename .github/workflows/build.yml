@@ -1,5 +1,5 @@
 name: Build
-# change 1
+# change 2
 on:
   push:
     paths:
@@ -41,13 +41,14 @@ jobs:
           echo "ref: ${{ github.ref }}"
       
       - name: Save PR metadata for CD workflow
-        if: github.event_name == 'pull_request'
+        # if: github.event_name == 'pull_request'
         run: |
           mkdir -p ./pr-metadata
-          echo "{\"number\":\"${{ github.event.pull_request.number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
+          # echo "{\"number\":\"${{ github.event.pull_request.number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
+          echo "{\"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
           
       - name: Upload PR metadata
-        if: github.event_name == 'pull_request'
+        # if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: pr-metadata
