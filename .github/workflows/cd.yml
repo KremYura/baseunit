@@ -36,7 +36,7 @@ jobs:
         if: ${{  env.IMG_VERSION != '' }}
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
           script: |
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
@@ -45,8 +45,8 @@ jobs:
               ref: 'master',
               inputs: {
                 imageTag: process.env.IMG_VERSION,
-                environment: 'prod01',
-                app_component: 'atool_api'
+                environment: 'prod',
+                app_component: 'api'
               }
             });
             console.log('Deployment workflow triggered successfully');
