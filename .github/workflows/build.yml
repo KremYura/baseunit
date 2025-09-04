@@ -1,15 +1,16 @@
 name: Build
+
 on:
   push:
     paths:
-      - **
+      - *
     branches:
       - main
 
   pull_request:
     types: [opened, reopened, synchronize]
     paths:
-      - **
+      - *
     branches:
       - main
 
