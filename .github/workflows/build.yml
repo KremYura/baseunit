@@ -30,8 +30,15 @@ jobs:
             type=sha,prefix=temp-{{branch}}-,event=branch,enable=${{ github.ref != format('refs/heads/{0}', 'main') }}
             type=ref,prefix=temp-,suffix=-{{sha}},event=pr
             type=ref,event=tag
+      
       - name: Set build version
         run: echo "BUILD_VERSION=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
+
+      - name: Debug event info
+        run: |
+          echo "event: ${{ github.event_name }}"
+          echo "ref: ${{ github.ref }}"
+      
       - name: Save PR metadata for CD workflow
         if: github.event_name == 'pull_request'
         run: |
