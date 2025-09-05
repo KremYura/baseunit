@@ -64,6 +64,9 @@ jobs:
               console.log(`PR has no-prod-deployment label: ${hasLabel}`);
             } else {
               console.log("This push was a direct commit, not a PR merge.");
+              core.setOutput('pr_number', null);
+              core.setOutput('pr_title', null);
+              core.setOutput('deploy_to_prod', false);
             }
       
       - name: Save PR metadata for CD workflow
