@@ -57,6 +57,11 @@ jobs:
               core.setOutput('pr_number', pr.number);
               core.setOutput('pr_title', pr.title);
               console.log(`This commit came from PR #${pr.number}: ${pr.title}`);
+
+              // Check if PR has the label "no-prod-deployment"
+              const hasLabel = pr.labels.some(label => label.name === 'no-prod-deployment');
+              core.setOutput('deploy_to_prod', !hasLabel);
+              console.log(`PR has no-prod-deployment label: ${hasLabel}`);
             } else {
               console.log("This push was a direct commit, not a PR merge.");
             }
@@ -65,7 +70,7 @@ jobs:
         # if: github.event_name == 'pull_request'
         run: |
           mkdir -p ./api-build-metadata
-          echo "{\"number\":\"${{ steps.detect-pr.outputs.pr_number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./api-build-metadata/api-build-metadata.json
+          echo "{\"number\":\"${{ steps.detect-pr.outputs.pr_number }}\", \"version\":\"${{ steps.meta.outputs.version }}\", \"deploy_to_prod\":\"${{ steps.meta.outputs.deploy_to_prod }}\"}" > ./api-build-metadata/api-build-metadata.json
           
       - name: Upload PR metadata
         # if: github.event_name == 'pull_request'
