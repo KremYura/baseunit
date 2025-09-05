@@ -21,7 +21,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           path: ./api-build-metadata
       - name: Read API Build metadata
-        id: read-metadata
+        id: api-read-metadata
         run: |
           if [ -f "./api-build-metadata/api-build-metadata.json" ]; then
             echo "PR metadata found"
@@ -52,6 +52,49 @@ jobs:
                 imageTag: process.env.IMG_VERSION,
                 environment: 'prod',
                 app_component: 'api'
+              }
+            });
+            console.log('Deployment workflow triggered successfully');
+
+      - name: Download UI workflow artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ui-build-metadata
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+          path: ./ui-build-metadata
+      - name: Read UI Build metadata
+        id: ui-read-metadata
+        run: |
+          if [ -f "./ui-build-metadata/ui-build-metadata.json" ]; then
+            echo "PR metadata found"
+            
+            IMG_VERSION=$(jq -r .version ./ui-build-metadata/ui-build-metadata.json)
+            echo "IMG_VERSION=$IMG_VERSION" >> $GITHUB_ENV
+            echo "UI IMG_VERSION=$IMG_VERSION"
+            
+            DEPLOY_TO_PROD=$(jq -r .deploy_to_prod ./ui-build-metadata/ui-build-metadata.json)
+            echo "DEPLOY_TO_PROD=$DEPLOY_TO_PROD" >> $GITHUB_ENV
+            echo "DEPLOY_TO_PROD=$DEPLOY_TO_PROD"
+          else
+            echo "No PR metadata found, this might be a direct push to main"
+            exit 0
+          fi
+      - name: Trigger deployment workflow
+        if: ${{  env.IMG_VERSION != '' && env.DEPLOY_TO_PROD == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'master',
+              inputs: {
+                imageTag: process.env.IMG_VERSION,
+                environment: 'prod',
+                app_component: 'ui'
               }
             });
             console.log('Deployment workflow triggered successfully');
