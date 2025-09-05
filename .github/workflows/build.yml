@@ -41,6 +41,7 @@ jobs:
           echo "ref: ${{ github.ref }}"
 
       - name: Detect merged PR
+        id: detect-pr
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -64,8 +65,7 @@ jobs:
         # if: github.event_name == 'pull_request'
         run: |
           mkdir -p ./pr-metadata
-          # echo "{\"number\":\"${{ github.event.pull_request.number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
-          echo "{\"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
+          echo "{\"number\":\"${{ steps.detect-pr.outputs.pr_number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
           
       - name: Upload PR metadata
         # if: github.event_name == 'pull_request'
