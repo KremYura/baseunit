@@ -70,7 +70,7 @@ jobs:
         # if: github.event_name == 'pull_request'
         run: |
           mkdir -p ./api-build-metadata
-          echo "{\"number\":\"${{ steps.detect-pr.outputs.pr_number }}\", \"version\":\"${{ steps.meta.outputs.version }}\", \"deploy_to_prod\":\"${{ steps.meta.outputs.deploy_to_prod }}\"}" > ./api-build-metadata/api-build-metadata.json
+          echo "{\"number\":\"${{ steps.detect-pr.outputs.pr_number }}\", \"version\":\"${{ steps.meta.outputs.version }}\", \"deploy_to_prod\":\"${{ steps.detect-pr.outputs.deploy_to_prod }}\"}" > ./api-build-metadata/api-build-metadata.json
           
       - name: Upload PR metadata
         # if: github.event_name == 'pull_request'
