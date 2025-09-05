@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      # API workflow
       - name: Download API workflow artifact
+        if: ${{ github.event.workflow_run.name == 'API Build' }}
         uses: actions/download-artifact@v4
         with:
           name: api-build-metadata
@@ -21,6 +23,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           path: ./api-build-metadata
       - name: Read API Build metadata
+        if: ${{ github.event.workflow_run.name == 'API Build' }}
         id: api-read-metadata
         run: |
           if [ -f "./api-build-metadata/api-build-metadata.json" ]; then
@@ -38,7 +41,7 @@ jobs:
             exit 0
           fi
       - name: Trigger deployment workflow
-        if: ${{  env.IMG_VERSION != '' && env.DEPLOY_TO_PROD == 'true' }}
+        if: ${{ github.event.workflow_run.name == 'API Build' && env.IMG_VERSION != '' && env.DEPLOY_TO_PROD == 'true' }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
@@ -56,7 +59,9 @@ jobs:
             });
             console.log('Deployment workflow triggered successfully');
 
+      # UI workflow
       - name: Download UI workflow artifact
+        if: ${{ github.event.workflow_run.name == 'UI Build' }}
         uses: actions/download-artifact@v4
         with:
           name: ui-build-metadata
@@ -64,6 +69,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           path: ./ui-build-metadata
       - name: Read UI Build metadata
+        if: ${{ github.event.workflow_run.name == 'UI Build' }}
         id: ui-read-metadata
         run: |
           if [ -f "./ui-build-metadata/ui-build-metadata.json" ]; then
@@ -81,7 +87,7 @@ jobs:
             exit 0
           fi
       - name: Trigger deployment workflow
-        if: ${{  env.IMG_VERSION != '' && env.DEPLOY_TO_PROD == 'true' }}
+        if: ${{ github.event.workflow_run.name == 'UI Build' && env.IMG_VERSION != '' && env.DEPLOY_TO_PROD == 'true' }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
