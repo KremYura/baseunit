@@ -1,5 +1,5 @@
 name: Build
-# change 7
+# change 8
 on:
   push:
     paths:
@@ -39,6 +39,26 @@ jobs:
         run: |
           echo "event: ${{ github.event_name }}"
           echo "ref: ${{ github.ref }}"
+
+      - name: Detect merged PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const sha = context.sha;
+            const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: sha
+            });
+            if (prs.data.length > 0) {
+              const pr = prs.data[0];
+              core.setOutput('pr_number', pr.number);
+              core.setOutput('pr_title', pr.title);
+              console.log(`This commit came from PR #${pr.number}: ${pr.title}`);
+            } else {
+              console.log("This push was a direct commit, not a PR merge.");
+            }
       
       - name: Save PR metadata for CD workflow
         # if: github.event_name == 'pull_request'
