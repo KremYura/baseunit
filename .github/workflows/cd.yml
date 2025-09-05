@@ -2,7 +2,7 @@ name: CD
 
 on:
   workflow_run:
-    workflows: ["Build"]
+    workflows: ["API Build", "UI Build"]
     types:
       - completed
     branches:
@@ -13,21 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Download workflow artifact
+      - name: Download API workflow artifact
         uses: actions/download-artifact@v4
         with:
-          name: pr-metadata
+          name: api-build-metadata
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
-          path: ./pr-metadata
-      - name: Read PR metadata
+          path: ./api-build-metadata
+      - name: Read API Build metadata
         id: read-metadata
         run: |
-          if [ -f "./pr-metadata/pr-metadata.json" ]; then
+          if [ -f "./api-build-metadata/api-build-metadata.json" ]; then
             echo "PR metadata found"
-            IMG_VERSION=$(jq -r .version ./pr-metadata/pr-metadata.json)
+            IMG_VERSION=$(jq -r .version ./api-build-metadata/api-build-metadata.json)
             echo "IMG_VERSION=$IMG_VERSION" >> $GITHUB_ENV
-            echo "IMG_VERSION=$IMG_VERSION"
+            echo "API IMG_VERSION=$IMG_VERSION"
           else
             echo "No PR metadata found, this might be a direct push to main"
             exit 0
