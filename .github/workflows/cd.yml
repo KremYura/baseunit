@@ -25,15 +25,20 @@ jobs:
         run: |
           if [ -f "./api-build-metadata/api-build-metadata.json" ]; then
             echo "PR metadata found"
+            
             IMG_VERSION=$(jq -r .version ./api-build-metadata/api-build-metadata.json)
             echo "IMG_VERSION=$IMG_VERSION" >> $GITHUB_ENV
             echo "API IMG_VERSION=$IMG_VERSION"
+            
+            DEPLOY_TO_PROD=$(jq -r .deploy_to_prod ./api-build-metadata/api-build-metadata.json)
+            echo "DEPLOY_TO_PROD=$DEPLOY_TO_PROD" >> $GITHUB_ENV
+            echo "DEPLOY_TO_PROD=$DEPLOY_TO_PROD"
           else
             echo "No PR metadata found, this might be a direct push to main"
             exit 0
           fi
       - name: Trigger deployment workflow
-        if: ${{  env.IMG_VERSION != '' }}
+        if: ${{  env.IMG_VERSION != '' && env.DEPLOY_TO_PROD == 'true' }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
