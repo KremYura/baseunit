@@ -1,10 +1,10 @@
-name: Build
-# change 9
+name: API Build
+# change 10
 on:
   push:
     paths:
       - packages/**
-      - .github/workflows/build.yml
+      - .github/workflows/api-build.yml
     branches:
       - master
 
@@ -12,7 +12,7 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - packages/**
-      - .github/workflows/build.yml
+      - .github/workflows/api-build.yml
     branches:
       - master
 
@@ -64,12 +64,12 @@ jobs:
       - name: Save PR metadata for CD workflow
         # if: github.event_name == 'pull_request'
         run: |
-          mkdir -p ./pr-metadata
-          echo "{\"number\":\"${{ steps.detect-pr.outputs.pr_number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./pr-metadata/pr-metadata.json
+          mkdir -p ./api-build-metadata
+          echo "{\"number\":\"${{ steps.detect-pr.outputs.pr_number }}\", \"version\":\"${{ steps.meta.outputs.version }}\"}" > ./api-build-metadata/api-build-metadata.json
           
       - name: Upload PR metadata
         # if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: pr-metadata
-          path: ./pr-metadata
+          name: api-build-metadata
+          path: ./api-build-metadata
